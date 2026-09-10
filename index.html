@@ -1,0 +1,499 @@
+html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Birthday Experience | المهندسة يقين أحمد 👑</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Font Awesome Pro/Free Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo & Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyberPink: '#f43f5e',
+                        cyberPurple: '#8b5cf6',
+                        techDark: '#0b0f19',
+                        glassBg: 'rgba(17, 24, 39, 0.75)',
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen relative pb-20">
+
+    <!-- Background Animated Canvas -->
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Global Sound Toggle Button -->
+    <button id="sound-btn" onclick="toggleAudio()" class="fixed top-5 left-5 z-50 w-12 h-12 rounded-full glass-panel border border-pink-500/40 text-pink-400 flex items-center justify-center text-xl hover:bg-pink-500 hover:text-white transition shadow-lg shadow-pink-500/20"
+        title="تشغيل/إيقاف الموسيقى">
+        <i class="fa-solid fa-volume-xmark" id="sound-icon"></i>
+    </button>
+
+    <!-- ================= UNBOXING OVERLAY (GIFT REVEAL) ================= -->
+    <div id="unboxing-overlay" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-2xl flex flex-col items-center justify-center p-4 transition-all duration-1000">
+        <div class="text-center max-w-lg mx-auto">
+            <div class="inline-block px-4 py-1.5 rounded-full glass-neon-purple text-purple-300 text-xs font-bold mb-6 tracking-wider animate-pulse">
+                🔒 هدية خاصة وحصرية جداً للمهندسة يقين
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
+                وصلتكِ بكيج مفاجأة عيد الميلاد! 🎁
+            </h1>
+            <p class="text-slate-400 text-sm sm:text-base mb-8">
+                تم تحضير هذا الموقع خصيصاً بمناسبة عيد ميلادكِ الـ 22. انقري على الصندوق لفك التشفير وفتح المفاجأة! ✨
+            </p>
+
+            <!-- Gift Box Button -->
+            <div onclick="openGift()" class="gift-box relative cursor-pointer w-44 h-44 mx-auto mb-8 flex items-center justify-center group">
+                <div class="absolute inset-0 bg-gradient-to-br from-pink-500 to-rose-700 rounded-3xl shadow-2xl shadow-pink-500/50 group-hover:shadow-pink-500/80 transition"></div>
+                <!-- Ribbons -->
+                <div class="absolute w-8 h-full bg-amber-300 left-1/2 -translate-x-1/2 shadow-inner"></div>
+                <div class="absolute h-8 w-full bg-amber-300 top-1/2 -translate-y-1/2 shadow-inner"></div>
+                <!-- Bow -->
+                <div class="absolute -top-6 text-6xl text-amber-300 filter drop-shadow-lg animate-bounce">
+                    🎀
+                </div>
+                <!-- Text inside -->
+                <span class="relative z-10 font-black text-slate-900 text-lg bg-amber-300/90 px-3 py-1 rounded-full shadow">
+                    افتحي الهدية 🗝️
+                </span>
+            </div>
+
+            <p class="text-xs text-slate-500">ملاحظة: يُفضّل تشغيل الصوت لتجربة تفاعلية ساحرة 🎧</p>
+        </div>
+    </div>
+
+
+    <!-- ================= MAIN SITE CONTENT ================= -->
+    <div id="main-content" class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-10 opacity-0 transition-opacity duration-1000">
+
+        <!-- HERO BANNER -->
+        <header class="text-center my-8 relative">
+            <!-- Decorative Badge -->
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-panel border border-pink-500/40 text-pink-300 text-sm font-bold mb-6 float-anim">
+                <span class="w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span>اليوم العالمي للمهندسة يقين أحمد 🎉</span>
+            </div>
+
+            <!-- Big Title -->
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-white glow-title leading-tight mb-4 tracking-tight">
+                كل عام وأنتِ بألف خير <br>
+                <span class="bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-300 bg-clip-text text-transparent">
+                    يا أحلى مهندسة يقينة! 💖
+                </span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto font-medium leading-relaxed">
+                22 سنة من اللطافة، الإبداع، والشطارة في <span class="text-indigo-400 font-bold">قسم هندسة الشبكات - جامعة بابل</span>! 🎓✨
+            </p>
+        </header>
+
+        <!-- QUICK DASHBOARD STATS -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+            <div class="glass-panel p-5 rounded-2xl text-center border-b-4 border-pink-500 hover:border-pink-400 transition">
+                <i class="fa-solid fa-cake-candles text-3xl text-pink-400 mb-2"></i>
+                <div class="text-slate-400 text-xs font-semibold">تاريخ الميلاد العظيم</div>
+                <div class="text-xl font-bold text-white mt-1">9 / 9 / 2004</div>
+            </div>
+            <div class="glass-panel p-5 rounded-2xl text-center border-b-4 border-purple-500 hover:border-purple-400 transition">
+                <i class="fa-solid fa-hourglass-half text-3xl text-purple-400 mb-2"></i>
+                <div class="text-slate-400 text-xs font-semibold">العمر الحالي</div>
+                <div class="text-xl font-bold text-white mt-1">22 سنة تكملة جمال 👑</div>
+            </div>
+            <div class="glass-panel p-5 rounded-2xl text-center border-b-4 border-indigo-500 hover:border-indigo-400 transition">
+                <i class="fa-solid fa-user-graduate text-3xl text-indigo-400 mb-2"></i>
+                <div class="text-slate-400 text-xs font-semibold">سنة التخرج</div>
+                <div class="text-xl font-bold text-white mt-1">دفعة 2027 🎓</div>
+            </div>
+            <div class="glass-panel p-5 rounded-2xl text-center border-b-4 border-emerald-500 hover:border-emerald-400 transition">
+                <i class="fa-solid fa-cookie-bite text-3xl text-emerald-400 mb-2"></i>
+                <div class="text-slate-400 text-xs font-semibold">مؤشر الكيوتنس والتختخة</div>
+                <div class="text-xl font-bold text-white mt-1">100% سمينة وكيوت 🍩</div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE NETWORK TOPOLOGY (CUSTOM TAILORED FOR NETWORK ENGINEER) -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-8 my-10 relative overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6 border-b border-slate-700/60 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-network-wired text-pink-400"></i> مخطط شبكة "يقينة" التفاعلي 🌐
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-1">انقري على عُقد الشبكة (Network Nodes) لإرسال حُزم المحبة والتهاني!</p>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-xl text-xs font-mono text-emerald-400 border border-emerald-500/30">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> STATUS: ONLINE (Ping 1ms)
+                </div>
+            </div>
+
+            <!-- Interactive Network Graph Nodes -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+                <!-- Node 1 -->
+                <div onclick="pingNode('server', 'سيرفر المهندسة يقين يعمل بكفاءة 100%! لا يوجد أي أخطاء، وسرعة البديهة واللطافة في أعلى مستوياتها! 💻✨')" class="glass-neon-pink p-5 rounded-2xl cursor-pointer hover:scale-105 transition transform flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-pink-500/20 border border-pink-500/50 flex items-center justify-center text-2xl text-pink-300 mb-3 group-hover:bg-pink-500 group-hover:text-white transition">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">Server_Yaqeen</h3>
+                    <p class="text-xs text-slate-400 mt-1">مركز التحكم في الكيوتنس</p>
+                    <span class="mt-3 text-[11px] text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full border border-pink-500/20">انقري لاختبار الاتصال 📶</span>
+                </div>
+
+                <!-- Node 2 -->
+                <div onclick="pingNode('babylon', 'تم الاتصال بجامعة بابل - قسم هندسة الشبكات! النتيجة: يقين هي أشطر وأحلى مهندسة متخرجة هالسنة! 🎓🏛️')" class="glass-neon-purple p-5 rounded-2xl cursor-pointer hover:scale-105 transition transform flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/50 flex items-center justify-center text-2xl text-purple-300 mb-3 group-hover:bg-purple-500 group-hover:text-white transition">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">Babylon_Univ_Node</h3>
+                    <p class="text-xs text-slate-400 mt-1">مشروع التخرج والنجاح</p>
+                    <span class="mt-3 text-[11px] text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20">انقري لاختبار الاتصال 📶</span>
+                </div>
+
+                <!-- Node 3 -->
+                <div onclick="pingNode('router', 'راوتر السعادة والضحكة: يوزّع طاقة إيجابية لجميع الأصدقاء بدون انقطاع وبسرعة 5G! 📶🍩')" class="glass-neon-pink p-5 rounded-2xl cursor-pointer hover:scale-105 transition transform flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-2xl text-rose-300 mb-3 group-hover:bg-rose-500 group-hover:text-white transition">
+                        <i class="fa-solid fa-wifi"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">Joy_Router_5G</h3>
+                    <p class="text-xs text-slate-400 mt-1">بث الضحكة والونسة</p>
+                    <span class="mt-3 text-[11px] text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">انقري لاختبار الاتصال 📶</span>
+                </div>
+
+                <!-- Node 4 -->
+                <div onclick="pingNode('firewall', 'جدار الحماية الفولاذي: يحمي يقينة من أي زعل أو طاقة سلبية ويسمح فقط بالورود والحلويات! 🛡️🌸')" class="glass-neon-purple p-5 rounded-2xl cursor-pointer hover:scale-105 transition transform flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/50 flex items-center justify-center text-2xl text-indigo-300 mb-3 group-hover:bg-indigo-500 group-hover:text-white transition">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">Love_Firewall</h3>
+                    <p class="text-xs text-slate-400 mt-1">حماية ضد الزعل والتعب</p>
+                    <span class="mt-3 text-[11px] text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">انقري لاختبار الاتصال 📶</span>
+                </div>
+            </div>
+
+            <!-- Ping Console Output Display -->
+            <div id="ping-output" class="bg-slate-950 p-4 rounded-xl font-mono text-sm text-pink-300 border border-slate-800 min-h-[60px] flex items-center gap-3">
+                <i class="fa-solid fa-terminal text-slate-500"></i>
+                <span id="ping-text">اضغطي على أي عُقدة من العُقد أعلاه لرؤية استجابة الشبكة...</span>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE CAKE & WISH SECTION -->
+        <section class="my-12">
+            <div class="glass-panel rounded-3xl p-8 max-w-3xl mx-auto text-center relative border border-pink-500/30">
+                <div class="inline-block px-4 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-bold mb-4">
+                    ✨ طقوس عيد الميلاد التفاعلية
+                </div>
+
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+                    كيكة الأمنيات الخاصة بـ "المهندسة يقين" 🎂
+                </h3>
+                <p class="text-slate-300 text-sm mb-8">
+                    اضغطي على الشموع لإطفائها، وتمني أمنية التخرج والتألق لسنتكِ الـ 22! 🕯️✨
+                </p>
+
+                <!-- 3D-styled Visual Cake -->
+                <div class="relative w-72 h-60 mx-auto flex flex-col items-center justify-end mb-6">
+
+                    <!-- Candles Container -->
+                    <div id="candles-container" class="flex gap-6 justify-center items-end mb-1 z-20 cursor-pointer" onclick="extinguishCandles()">
+                        <!-- Candle 1 -->
+                        <div class="flex flex-col items-center">
+                            <div class="flame" id="flame-1"></div>
+                            <div class="w-3.5 h-12 bg-gradient-to-b from-pink-300 to-pink-500 rounded-t shadow-md"></div>
+                        </div>
+                        <!-- Candle 2 (Middle Big) -->
+                        <div class="flex flex-col items-center">
+                            <div class="flame" id="flame-2"></div>
+                            <div class="w-4 h-16 bg-gradient-to-b from-amber-200 to-amber-500 rounded-t shadow-md"></div>
+                        </div>
+                        <!-- Candle 3 -->
+                        <div class="flex flex-col items-center">
+                            <div class="flame" id="flame-3"></div>
+                            <div class="w-3.5 h-12 bg-gradient-to-b from-indigo-300 to-indigo-500 rounded-t shadow-md"></div>
+                        </div>
+                    </div>
+
+                    <!-- Cake Top Layer -->
+                    <div class="w-48 h-16 bg-gradient-to-r from-pink-400 via-rose-300 to-pink-400 rounded-t-3xl border-b-4 border-pink-600 relative shadow-inner flex items-center justify-center">
+                        <span class="text-xs font-extrabold text-slate-900 tracking-wider bg-white/60 px-3 py-0.5 rounded-full shadow-sm">
+                            يقينة 22 🎈
+                        </span>
+                    </div>
+
+                    <!-- Cake Bottom Layer -->
+                    <div class="w-64 h-24 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 rounded-t-2xl border-b-8 border-purple-950 shadow-2xl flex items-center justify-center relative overflow-hidden">
+                        <!-- Cream Drips Decor -->
+                        <div class="absolute top-0 inset-x-0 h-4 bg-pink-300 rounded-b-xl opacity-80"></div>
+                        <span class="text-xs text-white/90 font-bold bg-black/30 px-3 py-1 rounded-full border border-white/20">
+                            جامعة بابل - شبكات 🎓
+                        </span>
+                    </div>
+
+                    <!-- Plate -->
+                    <div class="w-72 h-5 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-300 rounded-full shadow-2xl border-t border-slate-400"></div>
+                </div>
+
+                <!-- Wish Box Output -->
+                <div id="wish-box" class="glass-neon-pink p-4 rounded-2xl max-w-md mx-auto min-h-[50px] flex items-center justify-center text-amber-300 font-bold text-sm sm:text-base">
+                    👈 اضغطي على الشموع لإطفائها وتفعيل الأمنية!
+                </div>
+            </div>
+        </section>
+
+        <!-- YAQEEN ENGINEER TERMINAL (INTERACTIVE CLI) -->
+        <section class="my-12">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-700">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="text-xs font-mono text-slate-400 mr-2">YaqeenaOS_Terminal_v22.0.exe</span>
+                    </div>
+                    <span class="text-xs text-pink-400 font-mono">Bash / CLI Mode</span>
+                </div>
+
+                <div class="bg-slate-950 rounded-2xl p-4 sm:p-6 font-mono text-xs sm:text-sm text-emerald-400 min-h-[180px] shadow-inner space-y-3">
+                    <p class="text-slate-500"># مرحباً بك في موجه أوامر المهندسة يقين أحمد (شبكات جامعة بابل)</p>
+                    <p><span class="text-pink-400">yaqeen@babylon-net:~$</span> system_info --person</p>
+                    <p class="text-slate-300 pl-4">
+                        > Name: المهندسة يقين أحمد <br> > Age: 22 Years Old (9/9/2004) <br> > Major: هندسة شبكات الحاسوب 💻 <br> > Cute Level: Max (حجم مروس سمينة وكيوت 🍩) <br> > Status: جاهزة للتخرج والتألق 🎓
+                    </p>
+                    <div id="terminal-custom-output" class="text-pink-300 font-bold pl-4"></div>
+                </div>
+
+                <!-- Quick Command Buttons -->
+                <div class="mt-4 flex flex-wrap gap-2 justify-center sm:justify-start">
+                    <button onclick="runCommand('ping')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-pink-600 text-xs font-mono text-slate-200 transition border border-slate-700">
+                        > ping yaqeen
+                    </button>
+                    <button onclick="runCommand('graduate')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-purple-600 text-xs font-mono text-slate-200 transition border border-slate-700">
+                        > sudo graduate_now
+                    </button>
+                    <button onclick="runCommand('wish')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-indigo-600 text-xs font-mono text-slate-200 transition border border-slate-700">
+                        > cat best_wishes.txt
+                    </button>
+                    <button onclick="runCommand('clear')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-red-600 text-xs font-mono text-slate-200 transition border border-slate-700">
+                        > clear
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- POLAROID PHOTO GALLERY STUDIO -->
+        <section class="my-14">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                <div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-camera-retro text-pink-400"></i> ألبوم صور "المهندسة يقينة" ✨
+                    </h3>
+                    <p class="text-slate-400 text-sm mt-1">بطاقات قطبية فاخرة لحفظ أحلى صور يقين</p>
+                </div>
+
+
+            </div>
+
+            <!-- Polaroid Grid -->
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-2">
+
+                <!-- Card 1 -->
+                <div class="polaroid-card rounded-2xl transform sm:-rotate-2">
+                    <div class="w-full h-72 bg-slate-100 rounded-xl overflow-hidden relative group">
+                        <img src="A.jpg" alt="يقين" class="w-full h-full object-cover gallery-img transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4 text-white text-xs font-bold">
+                            المهندسة يقين - قسم الشبكات 💻
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="font-extrabold text-slate-900 text-lg block">أحلى مهندسة شبكات 👑</span>
+                        <span class="text-xs text-slate-500 font-semibold">ذوق، شطارة، وضحكة حلوة</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="polaroid-card rounded-2xl transform sm:rotate-2">
+                    <div class="w-full h-72 bg-slate-100 rounded-xl overflow-hidden relative group">
+                        <img src="D.jpg" alt="يقينة" class="w-full h-full object-cover gallery-img transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4 text-white text-xs font-bold">
+                            يقينة الكيوت والتختخة 🍩
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="font-extrabold text-slate-900 text-lg block">يقينة الكيوت 🍩</span>
+                        <span class="text-xs text-slate-500 font-semibold">حجم مروس من اللطافة والطيبة</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="polaroid-card rounded-2xl transform sm:-rotate-1">
+                    <div class="w-full h-72 bg-slate-100 rounded-xl overflow-hidden relative group">
+                        <img src="C.jpg" alt="تخرج جامعة بابل" class="w-full h-full object-cover gallery-img transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4 text-white text-xs font-bold">
+                            فخر جامعة بابل 🏛️
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="font-extrabold text-slate-900 text-lg block">دفعة التخرج 2026 🎓</span>
+                        <span class="text-xs text-slate-500 font-semibold">جامعة بابل تنتظر المهندسة</span>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="polaroid-card rounded-2xl transform sm:rotate-2">
+                    <div class="w-full h-72 bg-slate-100 rounded-xl overflow-hidden relative group">
+                        <img src="E.png" alt="يقينة" class="w-full h-full object-cover gallery-img transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4 text-white text-xs font-bold">
+                            يقينة البرشلونية (الفريق السيء)
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="font-extrabold text-slate-900 text-lg block"> يقينة البرشلونية (الفريق السيء) 🍩</span>
+                        <span class="text-xs text-slate-500 font-semibold">مغرمة بفريق سيء المستوى والسمعة . </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHEEL OF FORTUNE / COMPLIMENT GENERATOR -->
+        <section class="my-14">
+            <div class="glass-panel rounded-3xl p-8 text-center border border-purple-500/30">
+                <div class="w-16 h-16 rounded-2xl bg-purple-500/20 text-purple-300 text-3xl flex items-center justify-center mx-auto mb-4 border border-purple-500/40 shadow-lg">
+                    <i class="fa-solid fa-dice text-purple-400"></i>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-2">مولّد المفاجآت والرسائل السريعة 🎁</h3>
+                <p class="text-slate-300 text-sm mb-6">اضغطي هنا لسحب بطاقة حظ وإشادة مخصصة للمهندسة يقين!</p>
+
+                <div id="surprise-display" class="glass-neon-purple p-6 rounded-2xl max-w-xl mx-auto min-h-[90px] flex items-center justify-center mb-6 text-lg font-bold text-purple-200 transition-all">
+                    انقري على الزر بالأسفل لجلب بطاقة التهنئة ✨
+                </div>
+
+                <button onclick="generateSurprise()" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold transition shadow-lg shadow-purple-600/30 flex items-center gap-2 mx-auto">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>سحب بطاقة جديدة!</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- PRINTABLE OFFICIAL GRADUATION / BIRTHDAY HONOR CERTIFICATE -->
+        <section class="my-14">
+            <div class="glass-panel rounded-3xl p-8 sm:p-10 border border-amber-500/30 relative overflow-hidden" id="printable-certificate">
+
+                <!-- Certificate Watermark Icon -->
+                <div class="absolute -right-10 -bottom-10 text-slate-800/30 text-9xl pointer-events-none">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+
+                <div class="flex items-center justify-between border-b border-slate-700/80 pb-6 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-500/40">
+                            📜
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-amber-300">شهادة تقدير وتألق استثنائية</h4>
+                            <p class="text-xs text-slate-400">صادرة بمناسبة عيد الميلاد الـ 22 وقرب التخرج</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Certificate Content Box -->
+                <div class="text-center py-6 px-4 border-2 border-dashed border-amber-500/30 rounded-2xl bg-slate-900/40">
+                    <span class="text-amber-400 text-xs font-mono tracking-widest uppercase">جمهورية الهندسة واللطافة</span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white my-3">شهادة تميز للمهندسة يقين أحمد</h2>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
+                        تشهد هذه الوثيقة أن السيدّة <span class="text-amber-300 font-bold text-xl">المهندسة "يقين أحمد"</span> (يقينة) قد أتمّت
+                        <span class="text-pink-400 font-bold">22 عاماً</span> من نشر البهجة، الشطارة في هندسة الشبكات بجامعة بابل، وحضورها اللطيف المليء بالطاقة الإيجابية.
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-xl mx-auto mt-8 text-xs font-semibold text-slate-300">
+                        <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+                            <span class="text-amber-400 block mb-1">اللقب المحبوب</span>
+                            <span class="text-white font-bold text-sm">باش مهندسة يقينة 👑</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+                            <span class="text-amber-400 block mb-1">الجامعة والفرع</span>
+                            <span class="text-white font-bold text-sm">بابل - هندسة شبكات 🎓</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700 col-span-2 sm:col-span-1">
+                            <span class="text-amber-400 block mb-1">تاريخ الإصدار</span>
+                            <span class="text-white font-bold text-sm">9 سبتمبر 2004 ✨</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Signatures -->
+                <div class="mt-8 pt-4 flex flex-wrap justify-between items-center gap-4 text-xs text-slate-400">
+                    <div>توقيع الأصدقاء المحبين: <span class="text-pink-400 font-bold">#المهندسة_يقين 💖</span></div>
+                    <div class="text-amber-300/80 font-mono">VERIFIED_CERTIFICATE_ID: #YAQEENA-2026-VIP</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SPECIAL HEARTFELT MESSAGE CARD -->
+        <section class="my-14">
+            <div class="glass-panel rounded-3xl p-8 sm:p-10 border border-pink-500/30 relative">
+                <div class="flex items-center gap-3 text-pink-400 font-bold mb-4">
+                    <i class="fa-solid fa-heart text-2xl animate-bounce"></i>
+                    <span>بطاقة المعايدة والتهنئة الخاصة 💌</span>
+                </div>
+
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-4 leading-relaxed">
+                    إلى الغالية المهندسة يقين.. ❤️
+                </h3>
+
+                <div class="text-slate-200 text-base sm:text-lg leading-loose space-y-4">
+                    <p>
+                        كل عام وأنتِ بألف ألف خير يا رب! سنة جديدة تضاف لعمركِ المليء بالتألق والإنجازات واللطافة. 22 سنة من الضحكة الحلوة والطيبة الناادرة ✨.
+                    </p>
+                    <p>
+                        يارب تكون هذه السنة هي سنة الفرح الأكبر بتخرجكِ المشرّف من قسم هندسة الشبكات بجامعة بابل 🏛️🎓، وتشوفين كل أحلامكِ الكبيرة تتراصف قدامكِ بسهولة وتوفيق. خليكِ دائماً يقينة الكيوت المتميزة بقلبها الطيب وشطارتها الهندسية! 🍩🌸
+                    </p>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-700/60 flex flex-wrap justify-between items-center gap-4 text-slate-400 text-xs sm:text-sm">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-sparkles text-amber-400"></i>
+                        عيد ميلاد سعيد يا أحلى مهندسة شبكات 2026
+                    </span>
+                    <button onclick="triggerConfetti()" class="px-4 py-2 rounded-xl bg-pink-500/20 hover:bg-pink-500 text-pink-300 hover:text-white font-bold transition border border-pink-500/40 flex items-center gap-2">
+                        <i class="fa-solid fa-fireworks"></i>
+                        <span>إطلاق الألعاب النارية 🎆</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-slate-500 text-xs mt-16 pb-6">
+            <p>تم التصميم بكل حب واحترافية احتفالاً بعيد ميلاد المهندسة يقين أحمد 💖 2026</p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
